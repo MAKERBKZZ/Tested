@@ -1098,10 +1098,10 @@ InfoGroup:AddLabel('How to Use', true)
 InfoGroup:AddLabel('meant for pc only.', true)
 
 -- Dynamic Farm Tab from first script
-local DynamicFarmGroup = Tabs.DynamicFarm:AddLeftGroupbox('Dynamic Auto Farm')
+local DynamicFarmGroup = Tabs.DynamicFarm:AddLeftGroupbox('Dynamic Auto Farm To Volcano')
 
 DynamicFarmGroup:AddToggle('AutoFarmToggle', {
-    Text = 'Enable Auto Farm',
+    Text = 'Enable Auto Farm To Volcano',
     Default = false,
     Tooltip = 'AFK farm at Volcano, auto TP to events',
     Callback = toggleAutoFarm
