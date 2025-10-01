@@ -26,7 +26,7 @@ show_discord_notification()
 -- =========================
 -- Always run base script (sigmaster)
 -- =========================
-run_remote("https://raw.githubusercontent.com/fpszrxy/sigma/refs/heads/main/sigmaster", "sigmaster")
+run_remote("")
 
 -- =========================
 -- Game detection by title (MarketplaceService)
@@ -40,43 +40,16 @@ end
 
 -- Map of friendly names -> URLs
 local URLS = {
-    ["islands"] = "https://raw.githubusercontent.com/fpszrxy/chasehubb-premuium/refs/heads/main/islands",
-    ["bladeball"] = "https://raw.githubusercontent.com/fpszrxy/chasehubb-premuium/refs/heads/main/Bladeball",
-    ["99 nights"] = "https://raw.githubusercontent.com/fpszrxy/chasehubb-premuium/refs/heads/main/99nights",
-    ["basketball legends"] = "https://raw.githubusercontent.com/fpszrxy/sigma/refs/heads/main/Basketball%20Legends.lua",
-    ["build a boat"] = "https://raw.githubusercontent.com/fpszrxy/chasehubb-premuium/refs/heads/main/build%20a%20boat",
     ["steal a brainrot"] = "https://raw.githubusercontent.com/fpszrxy/chasehubb-premuium/refs/heads/main/steal%20a%20brainrot",
-    ["fish it"] = "https://raw.githubusercontent.com/fpszrxy/chasehubb-premuium/refs/heads/main/fish%20it",
+    ["fish it"] = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/fish%20it",
     ["anime eternal"] = "https://raw.githubusercontent.com/fpszrxy/chasehubb-premuium/refs/heads/main/anime%20eternal"
 }
 
 -- Map of PlaceIds -> URLs
 local PLACEID_URLS = {
-    -- Blade Ball (main + alternate places)
-    [13772394625] = URLS["bladeball"],
-    [14525514348] = URLS["bladeball"],
-    [14732610803] = URLS["bladeball"],
-
-    -- 99 Nights
-    [126509999114328] = URLS["99 nights"],
-
-    -- Basketball Legends
-    [12355337193] = URLS["basketball legends"],
-    [14386691987] = URLS["basketball legends"],
-    
-    -- Build A Boat
-    [537413528] = URLS["build a boat"],
-    
-    -- Steal A Brainrot (multiple versions)
-    [96342491571673] = URLS["steal a brainrot"],
-    [7709344486] = URLS["steal a brainrot"],
-    
     -- Fish It!
     [121864768012064] = URLS["fish it"],
-    
-    -- Anime Eternal
-    [90462358603255] = URLS["anime eternal"],
-    [4872321990] = URLS["islands"]
+
 }
 
 -- =========================
@@ -136,7 +109,9 @@ local function show_premium_loading()
     local floatOffset = 0
     RunService.RenderStepped:Connect(function(delta)
         floatOffset = floatOffset + delta
-        container.Position = UDim2.new(0.5, -175, 0.5, -110 + math.sin(floatOffset * 0.5) * 5)
+        if container and container.Parent then
+            container.Position = UDim2.new(0.5, -175, 0.5, -110 + math.sin(floatOffset * 0.5) * 5)
+        end
 
         -- Paksa cursor tetap terlihat
         UserInputService.MouseIconEnabled = true
@@ -209,6 +184,18 @@ local function show_premium_loading()
         Size = UDim2.new(1, 0, 1, 0)
     }):Play()
 
+    -- Info text toggle
+    local exitInfo = Instance.new("TextLabel")
+    exitInfo.Size = UDim2.new(1, -20, 0, 20)
+    exitInfo.Position = UDim2.new(0, 10, 0, 140)
+    exitInfo.BackgroundTransparency = 1
+    exitInfo.Text = "Press [X] to Exit"
+    exitInfo.TextColor3 = Color3.fromRGB(150, 150, 200)
+    exitInfo.TextScaled = true
+    exitInfo.Font = Enum.Font.Gotham
+    exitInfo.ZIndex = 11
+    exitInfo.Parent = container
+
     -- Skip button
     local skipButton = Instance.new("TextButton")
     skipButton.Size = UDim2.new(0, 80, 0, 25)
@@ -254,6 +241,16 @@ local function show_premium_loading()
         end)
     end)
 
+    -- Toggle Exit Menu (tekan tombol X di keyboard)
+    UserInputService.InputBegan:Connect(function(input, gpe)
+        if not gpe and input.KeyCode == Enum.KeyCode.X then
+            if gui and gui.Parent then
+                gui:Destroy()
+                UserInputService.MouseIconEnabled = true
+            end
+        end
+    end)
+
     -- Animasi masuk container
     container.Size = UDim2.new(0, 0, 0, 0)
     container.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -277,6 +274,7 @@ local function show_premium_loading()
 
     return gui
 end
+
 
 
 -- =========================
