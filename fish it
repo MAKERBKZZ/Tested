@@ -445,7 +445,7 @@ local function startAutoFishing()
     if fishingThread then task.cancel(fishingThread) fishingThread = nil end
     fishingThread = task.spawn(function()
         equipFishingRod()
-        task.wait(0.5)
+        task.wait(0.0001)
         while fishingEnabled and autoFarmEnabled do
             chargeFishingRod()
             task.wait(castDelay)
