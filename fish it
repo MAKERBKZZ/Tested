@@ -943,7 +943,7 @@ local function startAutoFishingSecond()
     
     fishingThread = task.spawn(function()
         equipFishingRod()
-        task.wait(0.2)
+        task.wait(0.001)
         
         while fishingEnabled do
             chargeFishingRod()
