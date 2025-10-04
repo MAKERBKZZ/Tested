@@ -65,7 +65,7 @@ local CancelFishingEvent = ReplicatedStorage.Packages._Index["sleitnick_net@0.2.
 
 --- NOCTIS TITLE
 local c = Color3.fromRGB(125, 85, 255)
-local title = ('<font color="#%s">NOCTIS</font>'):format(c:ToHex())
+local title = ('<font color="#%s">Dellstore</font>'):format(c:ToHex())
 
 -- ===========================
 -- INITIALIZE FEATURE MANAGER
@@ -76,7 +76,7 @@ mainLogger:info(string.format("Features ready: %d/%d", loadedCount, totalCount))
 
 --- === WINDOW === ---
 local Window = Noctis:CreateWindow({
-    Title         = "<b>Noctis</b>",
+    Title         = "<b>Dellstore</b>",
     Footer        = "Fish It | v1.4.9",
     Icon          = "rbxassetid://123156553209294",
     NotifySide    = "Right",
@@ -204,7 +204,7 @@ local autoFishFeature = FeatureManager:Get("AutoFish")
 local currentFishingMode = "Fast"
 local autofishmode_dd = FishingBox:AddDropdown("Fishingdd", {
     Text = "Fishing Mode",
-    Values = {"Fast", "Slow"},
+    Values = {"Fast", "Slow", "Extreme"},
     Default = 1,
     Callback = function(Value)
         currentFishingMode = Value
