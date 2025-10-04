@@ -65,9 +65,9 @@ local FISHING_CONFIGS = {
         chargeTime = 1.0,
         waitBetween = 0,
         rodSlot = 1,
-        spamDelay = 0.05,      -- Spam every 50ms
-        maxSpamTime = 20,       -- Stop spam after 20s
-        skipMinigame = true    -- Skip tap-tap animation
+        spamDelay = 0.05,      -- Spam setiap 50ms
+        maxSpamTime = 20,      -- Stop spam setelah 20 detik
+        skipMinigame = true    -- Lewati tap-tap
     },
     ["Slow"] = {
         chargeTime = 1.0,
@@ -75,10 +75,21 @@ local FISHING_CONFIGS = {
         rodSlot = 1,
         spamDelay = 0.1,
         maxSpamTime = 20,
-        skipMinigame = false,  -- Play tap-tap animation
-        minigameDuration = 5 -- Duration before firing completion
+        skipMinigame = false,  -- Tap-tap aktif
+        minigameDuration = 5   -- Durasi sebelum “FishingCompleted”
+    },
+    ["Extreme"] = {
+        chargeTime = 0.1,       -- Hampir instant lempar
+        waitBetween = 0,        -- Tidak ada jeda antar lemparan
+        rodSlot = 1,            -- Slot joran aktif
+        spamDelay = 0.01,       -- Spam tiap 10ms (sangat cepat)
+        maxSpamTime = 9999,     -- Tidak berhenti (auto farming)
+        skipMinigame = true,    -- Lewati semua animasi minigame
+        instantCatch = true,    -- Auto dapat ikan tanpa delay
+        bypassLimit = true      -- Lewati limit normal game
     }
 }
+
 
 -- Initialize
 function AutoFishFeature:Init(guiControls)
