@@ -11,6 +11,7 @@ FeatureManager.IsReady = false
 local FEATURE_URLS = {
     AutoFish           = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autofish.lua",
     AutoSellFish       = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autosellfish.lua",
+    AutoSellFishV2     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/AutoSellFishV2.lua",
     AutoTeleportIsland = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autoteleportisland.lua",
     FishWebhook        = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/fishwebhook.lua",
     AutoBuyWeather     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autobuyweather.lua",
