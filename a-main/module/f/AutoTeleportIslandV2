@@ -8,7 +8,7 @@
 local AutoTeleportIsland = {}
 AutoTeleportIsland.__index = AutoTeleportIsland
 
-local logger = _G.Logger and _G.Logger.new("AutoTeleportIslandV2") or {
+local logger = _G.Logger and _G.Logger.new("AutoTeleportIsland") or {
     debug = function() end,
     info = function() end,
     warn = function() end,
