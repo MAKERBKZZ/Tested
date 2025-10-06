@@ -53,7 +53,7 @@ local ISLAND_MAPPING = {
     ["Enchant Altar"]     = "Enchant Altar",
     ["Sisyphus Statue"]   = "Sisyphus Statue",
     ["Treasure Room"]     = "Treasure Room",
-    ["Belakang Patung"]   = "Belakang Patung(Kraken)",
+    ["Belakang Patung"]   = "Belakang Patung",
 }
 
 -- Resolve destination CFrame:
