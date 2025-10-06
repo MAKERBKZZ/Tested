@@ -940,7 +940,7 @@ local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
         "Coral Reefs",
         "Sisyphus Statue",
         "Treasure Room",
-        "Belakang Patung(Kraken)"
+        "Belakang Patung"
     },
     Searchable = true,
     MaxVisibileDropdownItems = 6,
