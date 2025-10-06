@@ -65,7 +65,7 @@ local CancelFishingEvent = ReplicatedStorage.Packages._Index["sleitnick_net@0.2.
 
 --- NOCTIS TITLE
 local c = Color3.fromRGB(125, 85, 255)
-local title = ('<font color="#%s">DellstoreV3</font>'):format(c:ToHex())
+local title = ('<font color="#%s">NOCTIS</font>'):format(c:ToHex())
 
 -- ===========================
 -- INITIALIZE FEATURE MANAGER
@@ -76,7 +76,7 @@ mainLogger:info(string.format("Features ready: %d/%d", loadedCount, totalCount))
 
 --- === WINDOW === ---
 local Window = Noctis:CreateWindow({
-    Title         = "<b>DellstoreV3</b>",
+    Title         = "<b>Noctis</b>",
     Footer        = "Fish It | v1.4.9",
     Icon          = "rbxassetid://123156553209294",
     NotifySide    = "Right",
@@ -204,7 +204,7 @@ local autoFishFeature = FeatureManager:Get("AutoFish")
 local currentFishingMode = "Fast"
 local autofishmode_dd = FishingBox:AddDropdown("Fishingdd", {
     Text = "Fishing Mode",
-    Values = {"Fast", "Slow", "Extreme"},
+    Values = {"Fast", "Slow"},
     Default = 1,
     Callback = function(Value)
         currentFishingMode = Value
@@ -939,8 +939,7 @@ local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
         "Crater Island",
         "Coral Reefs",
         "Sisyphus Statue",
-        "Treasure Room",
-        "Belakang Patung"
+        "Treasure Room"
     },
     Searchable = true,
     MaxVisibileDropdownItems = 6,
@@ -1335,7 +1334,7 @@ local autoReexec = FeatureManager:Get("AutoReexec")
 if autoReexec and autoReexec.Init and not autoReexec.__initialized then
     autoReexec:Init({
         mode = "url",
-        url  = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/dev/fishdev.lua",
+        url  = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/dev/fishdev.lua",
         rearmEveryS = 20,
         addBootGuard = true,
     })
