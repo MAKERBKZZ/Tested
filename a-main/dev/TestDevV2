@@ -102,7 +102,7 @@ local TabBackpack        = Window:AddTab("Backpack", "backpack")
 local TabAutomation      = Window:AddTab("Automation", "workflow")
 local TabShop            = Window:AddTab("Shop", "shopping-bag")
 local TabTeleport        = Window:AddTab("Teleport","map")
-local SpawnTeleport        = Window:AddTab("TeleportV2","map")
+local SpawnTeleport        = Window:AddTab("Teleport Spot","map")
 local TabMisc            = Window:AddTab("Misc", "cog")
 local TabSetting         = Window:AddTab("Setting", "settings")
 
@@ -1032,6 +1032,63 @@ if teleplayerFeature then
     end
 end
 
+local IslandBox = TabTeleport:AddLeftGroupbox("<b>Island V2</b>", "map")
+local autoTeleIslandFeature = FeatureManager:Get("AutoTeleportIsland")
+local currentIsland = "Fisherman Island"
+local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
+    Text = "Select Island V2",
+    Tooltip = "",
+    Values = {
+        "Fisherman Island",
+        "Esoteric Depths",
+        "Enchant Altar",
+        "Kohana",
+        "Kohana Volcano",
+        "Tropical Grove",
+        "Crater Island",
+        "Coral Reefs",
+        "Sisyphus Statue",
+        "Treasure Room",
+        "Belakang Patung",
+        "Bawah Air Terjun",
+        "Atas Air Terjun",
+        "Dalam Goa",
+        "Tebing Laut"
+    },
+    Searchable = true,
+    MaxVisibileDropdownItems = 6,
+    Multi = false,
+    Callback = function(Value)
+        currentIsland = Value or {}
+        if autoTeleIslandFeature and autoTeleIslandFeature.SetIsland then
+           autoTeleIslandFeature:SetIsland(Value)
+        end
+    end
+})
+local teleisland_btn = IslandBox:AddButton({
+    Text = "Teleport V2",
+    Func = function()
+        if autoTeleIslandFeature then
+            if autoTeleIslandFeature.SetIsland then
+                autoTeleIslandFeature:SetIsland(currentIsland)
+            end
+            if autoTeleIslandFeature.Teleport then
+                autoTeleIslandFeature:Teleport(currentIsland)
+            end
+        end
+    end
+})
+if autoTeleIslandFeature then
+    autoTeleIslandFeature.__controls = {
+        Dropdown = teleisland_dd,
+        button = teleisland_btn
+    }
+    
+    if autoTeleIslandFeature.Init and not autoTeleIslandFeature.__initialized then
+        autoTeleIslandFeature:Init(autoTeleIslandFeature, autoTeleIslandFeature.__controls)
+        autoTeleIslandFeature.__initialized = true
+    end
+end
 
 
 --- POSITION TELE
@@ -1184,17 +1241,21 @@ if positionManagerFeature then
 end
 
 --- Tab Spawn Teleport
--- 🐋 Teleport Farm (Paus & Batu)
-local IslandBox = SpawnTeleport:AddLeftGroupbox("<b>🐋 Teleport Spot Paus & Batu</b>", "map")
+
+local IslandBox = SpawnTeleport:AddLeftGroupbox("<b>Teleport To Spot</b>", "map")
 local autoTeleIslandFeature = FeatureManager:Get("AutoTeleportIsland")
 local currentIsland = "Fisherman Island"
+
+-- Dropdown pertama
 local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
     Text = "Select Spot Paus & Batu",
     Tooltip = "",
     Values = {
         "Bawah Air Terjun",
         "Atas Air Terjun",
-        "Tebing Laut"
+        "Dalam Goa",
+        "Tebing Laut",
+        "Belakang Patung",
     },
     Searchable = true,
     MaxVisibileDropdownItems = 6,
@@ -1202,46 +1263,19 @@ local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
     Callback = function(Value)
         currentIsland = Value or {}
         if autoTeleIslandFeature and autoTeleIslandFeature.SetIsland then
-           autoTeleIslandFeature:SetIsland(Value)
+            autoTeleIslandFeature:SetIsland(Value)
         end
     end
 })
-local teleisland_btn = IslandBox:AddButton({
-    Text = "Teleport Spot",
-    Func = function()
-        if autoTeleIslandFeature then
-            if autoTeleIslandFeature.SetIsland then
-                autoTeleIslandFeature:SetIsland(currentIsland)
-            end
-            if autoTeleIslandFeature.Teleport then
-                autoTeleIslandFeature:Teleport(currentIsland)
-            end
-        end
-    end
-})
-if autoTeleIslandFeature then
-    autoTeleIslandFeature.__controls = {
-        Dropdown = teleisland_dd,
-        button = teleisland_btn
-    }
-    
-    if autoTeleIslandFeature.Init and not autoTeleIslandFeature.__initialized then
-        autoTeleIslandFeature:Init(autoTeleIslandFeature, autoTeleIslandFeature.__controls)
-        autoTeleIslandFeature.__initialized = true
-    end
-end
 
--- Teleport Spot (Cacing)
-local IslandBox = SpawnTeleport:AddLeftGroupbox("<b>👹 Teleport Spot Cacing</b>", "map")
-local autoTeleIslandFeature = FeatureManager:Get("AutoTeleportIsland")
-local currentIsland = "Fisherman Island"
-local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
-    Text = "Select Spot Cacing",
+-- Dropdown kedua (v2)
+local teleisland_ddv2 = IslandBox:AddDropdown("teleislandddv2", {
+    Text = "Select Spot Teleport Spot Cacing",
     Tooltip = "",
     Values = {
         "NOOB",
         "Goa Es",
-        "Es Kecil"
+        "Es Kecil",
     },
     Searchable = true,
     MaxVisibileDropdownItems = 6,
@@ -1249,45 +1283,18 @@ local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
     Callback = function(Value)
         currentIsland = Value or {}
         if autoTeleIslandFeature and autoTeleIslandFeature.SetIsland then
-           autoTeleIslandFeature:SetIsland(Value)
+            autoTeleIslandFeature:SetIsland(Value)
         end
     end
 })
-local teleisland_btn = IslandBox:AddButton({
-    Text = "Teleport Spot",
-    Func = function()
-        if autoTeleIslandFeature then
-            if autoTeleIslandFeature.SetIsland then
-                autoTeleIslandFeature:SetIsland(currentIsland)
-            end
-            if autoTeleIslandFeature.Teleport then
-                autoTeleIslandFeature:Teleport(currentIsland)
-            end
-        end
-    end
-})
-if autoTeleIslandFeature then
-    autoTeleIslandFeature.__controls = {
-        Dropdown = teleisland_dd,
-        button = teleisland_btn
-    }
-    
-    if autoTeleIslandFeature.Init and not autoTeleIslandFeature.__initialized then
-        autoTeleIslandFeature:Init(autoTeleIslandFeature, autoTeleIslandFeature.__controls)
-        autoTeleIslandFeature.__initialized = true
-    end
-end
 
--- 🧊 Teleport Spot Frosborn Crater
-local IslandBox = SpawnTeleport:AddLeftGroupbox("<b>🧊 Teleport Spot Frosborn Crater</b>", "map")
-local autoTeleIslandFeature = FeatureManager:Get("AutoTeleportIsland")
-local currentIsland = "Fisherman Island"
-local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
-    Text = "Select 🧊 Teleport Spot Frosborn Crater",
+-- Dropdown kedua (v3)
+local teleisland_ddv3 = IslandBox:AddDropdown("teleislandddv3", {
+    Text = "Select Spot Frosborn Crater",
     Tooltip = "",
     Values = {
         "Tengah",
-        "Tepi"
+        "Tepi",
     },
     Searchable = true,
     MaxVisibileDropdownItems = 6,
@@ -1299,41 +1306,14 @@ local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
         end
     end
 })
-local teleisland_btn = IslandBox:AddButton({
-    Text = "Teleport Spot",
-    Func = function()
-        if autoTeleIslandFeature then
-            if autoTeleIslandFeature.SetIsland then
-                autoTeleIslandFeature:SetIsland(currentIsland)
-            end
-            if autoTeleIslandFeature.Teleport then
-                autoTeleIslandFeature:Teleport(currentIsland)
-            end
-        end
-    end
-})
-if autoTeleIslandFeature then
-    autoTeleIslandFeature.__controls = {
-        Dropdown = teleisland_dd,
-        button = teleisland_btn
-    }
-    
-    if autoTeleIslandFeature.Init and not autoTeleIslandFeature.__initialized then
-        autoTeleIslandFeature:Init(autoTeleIslandFeature, autoTeleIslandFeature.__controls)
-        autoTeleIslandFeature.__initialized = true
-    end
-end
 
---  Teleport (Kraken)
-local IslandBox = SpawnTeleport:AddLeftGroupbox("<b>🦑 Quest Teleport Kraken</b>", "map")
-local autoTeleIslandFeature = FeatureManager:Get("AutoTeleportIsland")
-local currentIsland = "Fisherman Island"
-local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
-    Text = "Select 🦑 Teleport Kraken",
+-- Dropdown kedua (v4)
+local teleisland_ddv4 = IslandBox:AddDropdown("teleislandddv4", {
+    Text = "Select Spot Kraken",
     Tooltip = "",
     Values = {
         "Depan Board",
-        "Belakang Patung"
+        "Belakang Patung",
     },
     Searchable = true,
     MaxVisibileDropdownItems = 6,
@@ -1345,42 +1325,15 @@ local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
         end
     end
 })
-local teleisland_btn = IslandBox:AddButton({
-    Text = "Teleport Spot",
-    Func = function()
-        if autoTeleIslandFeature then
-            if autoTeleIslandFeature.SetIsland then
-                autoTeleIslandFeature:SetIsland(currentIsland)
-            end
-            if autoTeleIslandFeature.Teleport then
-                autoTeleIslandFeature:Teleport(currentIsland)
-            end
-        end
-    end
-})
-if autoTeleIslandFeature then
-    autoTeleIslandFeature.__controls = {
-        Dropdown = teleisland_dd,
-        button = teleisland_btn
-    }
-    
-    if autoTeleIslandFeature.Init and not autoTeleIslandFeature.__initialized then
-        autoTeleIslandFeature:Init(autoTeleIslandFeature, autoTeleIslandFeature.__controls)
-        autoTeleIslandFeature.__initialized = true
-    end
-end
 
---  🌊 Teleport Spot Orca
-local IslandBox = SpawnTeleport:AddLeftGroupbox("<b>🌊 Teleport Spot Orca</b>", "map")
-local autoTeleIslandFeature = FeatureManager:Get("AutoTeleportIsland")
-local currentIsland = "Fisherman Island"
-local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
-    Text = "Select 🌊 Teleport Spot Orca",
+-- Dropdown kedua (v5)
+local teleisland_ddv5 = IslandBox:AddDropdown("teleislandddv5", {
+    Text = "Select Spot Orca",
     Tooltip = "",
     Values = {
         "Bawah Jembatan",
         "Atas Jembatan",
-        "Pulau Kecil"
+        "Pulau Kecil",
     },
     Searchable = true,
     MaxVisibileDropdownItems = 6,
