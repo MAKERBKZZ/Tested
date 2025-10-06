@@ -1,39 +1,85 @@
 -- ====================================================================
--- AUTO SELL FISH (Reworked Integration)
--- Combines new AutoSell system with legacy GUI compatibility
+-- AutoSellFish.lua — Full ready-to-use integration
+-- Uses: RF/SellAllItems and RF/UpdateAutoSellThreshold
+-- Compatible with existing GUI (FeatureManager:Get("AutoSellFish"))
 -- ====================================================================
 
 local AutoSellFish = {}
 AutoSellFish.__index = AutoSellFish
 
--- Dependencies
+-- Services
 local Players        = game:GetService("Players")
 local Replicated     = game:GetService("ReplicatedStorage")
 local LocalPlayer    = Players.LocalPlayer
 
--- Helper function to resolve remotes
-local function ResolveRemote(path)
-    local ok, result = pcall(function()
-        local node = Replicated
-        for seg in string.gmatch(path, "[^/]+") do
-            node = node:WaitForChild(seg, 5)
-        end
-        return node
-    end)
-    return ok and result or nil
-end
-
+-- Small safe notify helper: tries a global notify if available, else prints
 local function Notify(title, msg)
-    print(("[AutoSell] %s | %s"):format(title, msg))
+    local ok = pcall(function()
+        if type(_G.Notify) == "function" then
+            _G.Notify(title, msg)
+        end
+    end)
+    if not ok or type(_G.Notify) ~= "function" then
+        -- fallback to print
+        print(("[AutoSell] %s | %s"):format(title, msg))
+    end
 end
 
-----------------------------------------------------------------------
--- INTERNAL SYSTEM VARIABLES
-----------------------------------------------------------------------
+-- ResolveRemote:
+-- Accepts a slash-delimited path like "RF/SellAllItems" or a long path.
+-- First tries sequential WaitForChild from ReplicatedStorage, if that fails
+-- tries a descendant search for the final name as fallback.
+local function ResolveRemote(path)
+    if type(path) ~= "string" then return nil end
+    local segments = {}
+    for seg in string.gmatch(path, "[^/]+") do
+        table.insert(segments, seg)
+    end
 
+    -- Try sequential WaitForChild (fast/direct)
+    local success, node = pcall(function()
+        local cur = Replicated
+        for _, seg in ipairs(segments) do
+            cur = cur:WaitForChild(seg, 2)
+        end
+        return cur
+    end)
+    if success and node then
+        return node
+    end
+
+    -- Fallback: try find descendant by final segment name
+    local finalName = segments[#segments]
+    if finalName then
+        local found = Replicated:FindFirstChild(finalName, true) -- Roblox FindFirstChild(recursive) isn't built-in, so simulate:
+        -- There's no built-in recursive FindFirstChild in standard API; implement safe recursive search:
+        local function recursiveFind(parent, name)
+            for _, child in ipairs(parent:GetChildren()) do
+                if child.Name == name then
+                    return child
+                end
+            end
+            for _, child in ipairs(parent:GetChildren()) do
+                local res = recursiveFind(child, name)
+                if res then return res end
+            end
+            return nil
+        end
+        local ok, res = pcall(function() return recursiveFind(Replicated, finalName) end)
+        if ok and res then
+            return res
+        end
+    end
+
+    return nil
+end
+
+-- ====================================================================
+-- Internal AutoSell system (configurable)
+-- ====================================================================
 local AutoSell = {
     enabled = false,
-    threshold = 50,
+    threshold = 50, -- numeric threshold (used as total count threshold)
     isCurrentlySelling = false,
     allowedRarities = {
         COMMON = true,
@@ -52,7 +98,8 @@ local AutoSell = {
         MYTHIC = 0
     },
     lastSellTime = 0,
-    sellCooldown = 5,
+    sellCooldown = 5, -- seconds between sells
+    -- server sync
     serverThreshold = 50,
     lastSyncTime = 0,
     syncCooldown = 2,
@@ -61,27 +108,29 @@ local AutoSell = {
     maxSyncRetries = 3
 }
 
-----------------------------------------------------------------------
--- SERVER SYNC SYSTEM
-----------------------------------------------------------------------
+-- Helper: map GUI mode string to numeric threshold (can be adjusted)
+local MODE_MAP = { Secret = 70, Mythic = 60, Legendary = 50 }
 
+-- ====================================================================
+-- Server sync functions
+-- ====================================================================
 local function SyncAutoSellThresholdWithServer(newThreshold)
     local now = tick()
     if now - AutoSell.lastSyncTime < AutoSell.syncCooldown then
         return false, "sync_cooldown"
     end
-    
-    local updateThresholdRemote = ResolveRemote("Packages/_Index/sleitnick_net@0.2.0/net/RF/UpdateAutoSellThreshold")
+
+    local updateThresholdRemote = ResolveRemote("RF/UpdateAutoSellThreshold")
     if not updateThresholdRemote then
         return false, "remote_not_found"
     end
-    
+
     AutoSell.lastSyncTime = now
-    
+
     local success, result = pcall(function()
         return updateThresholdRemote:InvokeServer(newThreshold)
     end)
-    
+
     if success then
         AutoSell.serverThreshold = newThreshold
         AutoSell.isThresholdSynced = true
@@ -89,9 +138,9 @@ local function SyncAutoSellThresholdWithServer(newThreshold)
         Notify("Auto Sell Sync", ("✅ Threshold synced: %d"):format(newThreshold))
         return true, result
     else
-        AutoSell.syncRetries += 1
+        AutoSell.syncRetries = AutoSell.syncRetries + 1
         AutoSell.isThresholdSynced = false
-        Notify("Auto Sell Sync", ("❌ Sync failed (%d/%d)"):format(AutoSell.syncRetries, AutoSell.maxSyncRetries))
+        Notify("Auto Sell Sync", ("❌ Sync failed (Attempt %d/%d)"):format(AutoSell.syncRetries, AutoSell.maxSyncRetries))
         if AutoSell.syncRetries < AutoSell.maxSyncRetries then
             task.spawn(function()
                 task.wait(AutoSell.syncCooldown * 2)
@@ -102,87 +151,174 @@ local function SyncAutoSellThresholdWithServer(newThreshold)
     end
 end
 
+local function GetServerAutoSellThreshold()
+    local updateThresholdRemote = ResolveRemote("RF/UpdateAutoSellThreshold")
+    if not updateThresholdRemote then
+        return nil, "remote_not_found"
+    end
+
+    local success, result = pcall(function()
+        return updateThresholdRemote:InvokeServer(0)
+    end)
+
+    if success and type(result) == "number" and result > 0 then
+        AutoSell.serverThreshold = result
+        return result, "success"
+    else
+        return nil, result
+    end
+end
+
 local function InitializeAutoSellSync()
     task.spawn(function()
         task.wait(2)
-        SyncAutoSellThresholdWithServer(AutoSell.threshold)
+        local serverThreshold, err = GetServerAutoSellThreshold()
+        if serverThreshold then
+            AutoSell.threshold = serverThreshold
+            AutoSell.serverThreshold = serverThreshold
+            AutoSell.isThresholdSynced = true
+            Notify("Auto Sell Sync", ("📥 Retrieved server threshold: %d"):format(serverThreshold))
+        else
+            Notify("Auto Sell Sync", "⚠️ Could not retrieve server threshold, using local: " .. tostring(AutoSell.threshold))
+            SyncAutoSellThresholdWithServer(AutoSell.threshold)
+        end
     end)
 end
 
-----------------------------------------------------------------------
--- CORE AUTO SELL LOGIC
-----------------------------------------------------------------------
-
+-- ====================================================================
+-- Core selling logic
+-- ====================================================================
 local function GetTotalFishForSell()
     local total = 0
     for rarity, count in pairs(AutoSell.sellCount) do
         if AutoSell.allowedRarities[rarity] then
-            total += count
+            total = total + (tonumber(count) or 0)
         end
     end
     return total
 end
 
 local function ResetSellCounts()
-    for rarity in pairs(AutoSell.sellCount) do
+    for rarity, _ in pairs(AutoSell.sellCount) do
         AutoSell.sellCount[rarity] = 0
     end
 end
 
 local function CheckAndAutoSell()
-    if not AutoSell.enabled or AutoSell.isCurrentlySelling then return end
-    local total = GetTotalFishForSell()
-    if total < AutoSell.threshold then return end
+    if not AutoSell.enabled or AutoSell.isCurrentlySelling then
+        return
+    end
+
+    local totalFishToSell = GetTotalFishForSell()
+    if totalFishToSell < AutoSell.threshold then
+        return
+    end
 
     local now = tick()
-    if now - AutoSell.lastSellTime < AutoSell.sellCooldown then return end
+    if now - AutoSell.lastSellTime < AutoSell.sellCooldown then
+        return
+    end
 
     AutoSell.isCurrentlySelling = true
     AutoSell.lastSellTime = now
 
     pcall(function()
-        local char = LocalPlayer.Character
-        if not (char and char:FindFirstChild("HumanoidRootPart")) then
+        if not (LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) then
             AutoSell.isCurrentlySelling = false
             return
         end
 
-        local root = char.HumanoidRootPart
-        local original = root.CFrame
-        local npcContainer = Replicated:FindFirstChild("NPC")
-        local sellNpc = npcContainer and (npcContainer:FindFirstChild("Alex") or npcContainer:FindFirstChild("Shop"))
+        local originalCFrame = LocalPlayer.Character.HumanoidRootPart.CFrame
 
-        root.CFrame = sellNpc and sellNpc.WorldPivot or CFrame.new(-31.10, 4.84, 2899.03)
-        Notify("Auto Sell", ("🚀 Selling %d fish..."):format(total))
+        -- Find NPC or fallback coordinates
+        local sellNpc = nil
+        local npcContainer = Replicated:FindFirstChild("NPC")
+        if npcContainer then
+            sellNpc = npcContainer:FindFirstChild("Alex") or npcContainer:FindFirstChild("Shop")
+        end
+
+        if sellNpc and sellNpc:FindFirstChild("WorldPivot") then
+            LocalPlayer.Character.HumanoidRootPart.CFrame = sellNpc.WorldPivot
+        else
+            LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-31.10, 4.84, 2899.03)
+        end
+
+        Notify("Auto Sell", ("🚀 Auto selling %d fish (Threshold: %d)"):format(totalFishToSell, AutoSell.threshold))
         task.wait(1.5)
 
-        local sellRemote = ResolveRemote("Packages/_Index/sleitnick_net@0.2.0/net/RF/SellAllItems")
+        local sellRemote = ResolveRemote("RF/SellAllItems")
         if sellRemote then
-            local ok = pcall(function() sellRemote:InvokeServer() end)
-            if ok then
-                Notify("Auto Sell", "✅ Sell successful")
+            local success, res = pcall(function()
+                if sellRemote:IsA("RemoteFunction") then
+                    return sellRemote:InvokeServer()
+                else
+                    return sellRemote:FireServer()
+                end
+            end)
+            if success then
+                Notify("Auto Sell", "✅ Auto sell successful!")
                 ResetSellCounts()
             else
-                Notify("Auto Sell", "❌ Sell failed")
+                Notify("Auto Sell", "❌ Auto sell failed!")
             end
         else
             Notify("Auto Sell", "❌ Sell remote not found!")
         end
 
         task.wait(1.5)
-        if char and char:FindFirstChild("HumanoidRootPart") then
-            root.CFrame = original
-        end
-        Notify("Auto Sell", "🏠 Returned to fishing spot")
 
+        -- return
+        if LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            LocalPlayer.Character.HumanoidRootPart.CFrame = originalCFrame
+        end
+
+        Notify("Auto Sell", "🏠 Returned to fishing spot")
         AutoSell.isCurrentlySelling = false
     end)
 end
 
-----------------------------------------------------------------------
--- GUI COMPATIBILITY WRAPPERS
-----------------------------------------------------------------------
+-- ====================================================================
+-- Hooks & helpers for fish detection
+-- ====================================================================
+-- Helper: safe GetFishRarity if defined elsewhere
+local function SafeGetFishRarity(fishName)
+    if type(GetFishRarity) == "function" then
+        local ok, r = pcall(function() return GetFishRarity(fishName) end)
+        if ok and type(r) == "string" then return r end
+    end
+    -- fallback: attempt simple mapping by name (common heuristic)
+    -- try to detect keywords in fishName
+    local name = tostring(fishName):upper()
+    if name:find("MYTH") then return "MYTHIC" end
+    if name:find("LEGEND") then return "LEGENDARY" end
+    if name:find("EPIC") then return "EPIC" end
+    if name:find("RARE") then return "RARE" end
+    if name:find("UNCOMMON") then return "UNCOMMON" end
+    return "COMMON"
+end
 
+-- Hook existing LogFishCatch if available
+if typeof(LogFishCatch) == "function" then
+    local originalLogFishCatch = LogFishCatch
+    LogFishCatch = function(fishName, location)
+        -- call original
+        pcall(function() originalLogFishCatch(fishName, location) end)
+
+        if AutoSell.enabled then
+            local rarity = SafeGetFishRarity(fishName)
+            if AutoSell.sellCount[rarity] ~= nil then
+                AutoSell.sellCount[rarity] = (AutoSell.sellCount[rarity] or 0) + 1
+            end
+            -- run check (non-blocking)
+            task.spawn(function() CheckAndAutoSell() end)
+        end
+    end
+end
+
+-- ====================================================================
+-- GUI compatibility wrappers (FeatureManager interface)
+-- Methods: Init, Start(config), Stop, SetMode(mode), SetLimit(n), SetAutoSellOnLimit(bool)
+-- ====================================================================
 function AutoSellFish:Init()
     InitializeAutoSellSync()
     return true
@@ -190,10 +326,31 @@ end
 
 function AutoSellFish:Start(config)
     AutoSell.enabled = true
-    AutoSell.threshold = tonumber(config.limit) or AutoSell.threshold
-    AutoSell.sellCooldown = tonumber(config.limit) or 5
-    SyncAutoSellThresholdWithServer(AutoSell.threshold)
+
+    -- config.limit expected to be numeric cooldown or threshold depending on GUI usage
+    -- We'll use config.limit as sellCooldown if > 0, and keep threshold separate via SetMode
+    if config and type(config.limit) == "number" and config.limit > 0 then
+        AutoSell.sellCooldown = config.limit
+    end
+
+    -- If config.threshold present (string from dropdown), map it
+    if config and config.threshold and MODE_MAP[config.threshold] then
+        AutoSell.threshold = MODE_MAP[config.threshold]
+    end
+
+    -- Sync to server
+    pcall(function() SyncAutoSellThresholdWithServer(AutoSell.threshold) end)
+
     Notify("Auto Sell", "▶️ Started Auto Sell system")
+
+    -- Main loop (lightweight)
+    task.spawn(function()
+        while AutoSell.enabled do
+            -- run a check and wait small interval (so checks react to log updates)
+            CheckAndAutoSell()
+            task.wait( math.max(0.5, AutoSell.sellCooldown) )
+        end
+    end)
 end
 
 function AutoSellFish:Stop()
@@ -202,45 +359,40 @@ function AutoSellFish:Stop()
 end
 
 function AutoSellFish:SetMode(mode)
-    -- For compatibility, map dropdown rarity selection to numeric threshold
-    local map = { Secret = 70, Mythic = 60, Legendary = 50 }
-    if map[mode] then
-        AutoSell.threshold = map[mode]
-        SyncAutoSellThresholdWithServer(AutoSell.threshold)
-        Notify("Auto Sell", "🎚️ Mode set: " .. mode)
+    if MODE_MAP[mode] then
+        AutoSell.threshold = MODE_MAP[mode]
+        pcall(function() SyncAutoSellThresholdWithServer(AutoSell.threshold) end)
+        Notify("Auto Sell", "🎚️ Mode set: " .. tostring(mode))
         return true
     end
     return false
 end
 
 function AutoSellFish:SetLimit(n)
-    AutoSell.sellCooldown = tonumber(n) or 5
-    Notify("Auto Sell", "⏱️ Cooldown set to " .. AutoSell.sellCooldown .. "s")
-    return true
+    local num = tonumber(n)
+    if num and num > 0 then
+        AutoSell.sellCooldown = num
+        Notify("Auto Sell", "⏱️ Cooldown set to " .. tostring(num) .. "s")
+        return true
+    end
+    return false
 end
 
 function AutoSellFish:SetAutoSellOnLimit(enabled)
-    AutoSell.enabled = enabled
-    Notify("Auto Sell", enabled and "✅ Enabled" or "❌ Disabled")
+    AutoSell.enabled = not not enabled
+    Notify("Auto Sell", AutoSell.enabled and "✅ Enabled" or "❌ Disabled")
     return true
 end
 
-----------------------------------------------------------------------
--- Hook fish catch to trigger auto sell checks
-----------------------------------------------------------------------
-
-if typeof(LogFishCatch) == "function" then
-    local old = LogFishCatch
-    LogFishCatch = function(fishName, location)
-        old(fishName, location)
-        if AutoSell.enabled then
-            local rarity = GetFishRarity(fishName)
-            if AutoSell.sellCount[rarity] ~= nil then
-                AutoSell.sellCount[rarity] += 1
-            end
-            CheckAndAutoSell()
-        end
-    end
+-- ====================================================================
+-- Register with FeatureManager (if available) or return module
+-- ====================================================================
+if type(FeatureManager) == "table" and type(FeatureManager.Register) == "function" then
+    pcall(function() FeatureManager:Register("AutoSellFish", AutoSellFish) end)
+else
+    -- If no FeatureManager, return module for manual require
+    return AutoSellFish
 end
 
+-- If we registered with FeatureManager, also return the table for require callers
 return AutoSellFish
