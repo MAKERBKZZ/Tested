@@ -66,13 +66,21 @@ local ISLAND_MAPPING = {
     ["Enchant Altar"]     = "Enchant Altar",
     ["Sisyphus Statue"]   = "Sisyphus Statue",
     ["Treasure Room"]     = "Treasure Room",
-    ["Belakang Patung"]   = "Belakang Patung",
+    ["Bawah Air Terjun"]  = "Bawah Air Terjun",
+    ["Atas Air Terjun"]   = "Atas Air Terjun",
+    ["Dalam Goa"]         = "Dalam Goa",
+    ["Tebing Laut"]       = "Tebing Laut",
+    ["NOOB"]              = "NOOB",
+    ["Tengah"]            = "Tengah",
+    ["Tepi"]              = "Tepi",
     ["Depan Board"]       = "Depan Board",
+    ["Belakang Patung"]   = "Belakang Patung",
     ["Bawah Jembatan"]    = "Bawah Jembatan",
     ["Atas Jembatan"]     = "Atas Jembatan",
     ["Pulau Kecil"]       = "Pulau Kecil",
     ["Goa Es"]            = "Goa Es",
     ["Es Kecil"]          = "Es Kecil",
+    
 }
 
 -- Resolve destination CFrame:
