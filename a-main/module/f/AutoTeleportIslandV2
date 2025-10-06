@@ -5,8 +5,8 @@
 -- If an island isn’t in the static table, it falls back to the old workspace lookup.
 -- ===========================
 
-local AutoTeleportIslandV2 = {}
-AutoTeleportIslandV2.__index = AutoTeleportIslandV2
+local AutoTeleportIsland = {}
+AutoTeleportIsland.__index = AutoTeleportIsland
 
 local logger = _G.Logger and _G.Logger.new("AutoTeleportIslandV2") or {
     debug = function() end,
@@ -58,7 +58,7 @@ local ISLAND_MAPPING = {
 
 -- Resolve destination CFrame:
 -- 1) static table (preferred), 2) dynamic fallback in Workspace.
-function AutoTeleportIslandV2:GetIslandCFrame(islandName)
+function AutoTeleportIsland:GetIslandCFrame(islandName)
     local cf = STATIC_ISLAND_CFRAMES[islandName]
     if cf then
         return cf
@@ -96,7 +96,7 @@ function AutoTeleportIslandV2:GetIslandCFrame(islandName)
 end
 
 -- Hard teleport with fixed Y-offset = 6.
-function AutoTeleportIslandV2:TeleportToPosition(cframe)
+function AutoTeleportIsland:TeleportToPosition(cframe)
     if not LocalPlayer.Character then
          logger:warn("Player character not found")
         return false
@@ -114,14 +114,14 @@ function AutoTeleportIslandV2:TeleportToPosition(cframe)
 end
 
 -- Init / wiring from GUI
-function AutoTeleportIslandV2:Init(guiControls)
+function AutoTeleportIsland:Init(guiControls)
     controls = guiControls or {}
     isInitialized = true
     logger:info("Initialized successfully")
     return true
 end
 
-function AutoTeleportIslandV2:SetIsland(islandName)
+function AutoTeleportIsland:SetIsland(islandName)
     if STATIC_ISLAND_CFRAMES[islandName] or ISLAND_MAPPING[islandName] then
         currentIsland = islandName
         logger:info("Target island set to:", islandName)
@@ -132,7 +132,7 @@ function AutoTeleportIslandV2:SetIsland(islandName)
     end
 end
 
-function AutoTeleportIslandV2:Teleport(targetIsland)
+function AutoTeleportIsland:Teleport(targetIsland)
     if not isInitialized then
          logger:warn("Feature not initialized")
         return false
@@ -173,7 +173,7 @@ function AutoTeleportIslandV2:Teleport(targetIsland)
     return success
 end
 
-function AutoTeleportIslandV2:GetStatus()
+function AutoTeleportIsland:GetStatus()
     local islandList = {}
     for name in pairs(STATIC_ISLAND_CFRAMES) do
         table.insert(islandList, name)
@@ -186,7 +186,7 @@ function AutoTeleportIslandV2:GetStatus()
     }
 end
 
-function AutoTeleportIslandV2:GetIslandList()
+function AutoTeleportIsland:GetIslandList()
     local islands = {}
     for name in pairs(STATIC_ISLAND_CFRAMES) do
         table.insert(islands, name)
@@ -195,10 +195,10 @@ function AutoTeleportIslandV2:GetIslandList()
     return islands
 end
 
-function AutoTeleportIslandV2:Cleanup()
+function AutoTeleportIsland:Cleanup()
      logger:info("Cleaning up...")
     controls = {}
     isInitialized = false
 end
 
-return AutoTeleportIslandV2
+return AutoTeleportIsland
