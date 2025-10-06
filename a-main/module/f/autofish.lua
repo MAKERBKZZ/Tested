@@ -83,17 +83,18 @@ local FISHING_CONFIGS = {
 		bypassLimit = true
 	},
 	["SuperExtreme"] = {
-		chargeTime = 0.05,       -- Lebih cepat dari Extreme
-		waitBetween = 0,
-		rodSlot = 1,
-		spamDelay = 0.0001,      -- Spam ultra cepat
-		maxSpamTime = 9999,      -- Akan di-random setiap siklus
-		skipMinigame = true,
-		instantCatch = true,
-		bypassLimit = true,
-		ignoreCooldown = true,
-		superReel = true
-	}
+        chargeTime = 0.0001,                   -- Instant lempar
+        waitBetween = 0,
+        rodSlot = 1,
+        spamDelay = 0.0001,                  -- Spam ultra cepat
+        maxSpamTime = math.random(30,11000), -- Random waktu aktif
+        skipMinigame = true,
+        instantCatch = true,
+        bypassLimit = true,
+        ignoreCooldown = true,
+        superReel = true,
+        amazingCast = true                   -- 💥 Auto Amazing Cast
+    }
 }
 
 -- Initialize
@@ -298,3 +299,4 @@ function AutoFishFeature:Cleanup()
 end
 
 return AutoFishFeature
+
