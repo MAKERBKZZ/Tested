@@ -65,7 +65,7 @@ local CancelFishingEvent = ReplicatedStorage.Packages._Index["sleitnick_net@0.2.
 
 --- NOCTIS TITLE
 local c = Color3.fromRGB(125, 85, 255)
-local title = ('<font color="#%s">DellstoreV2</font>'):format(c:ToHex())
+local title = ('<font color="#%s">DellstoreV3</font>'):format(c:ToHex())
 
 -- ===========================
 -- INITIALIZE FEATURE MANAGER
