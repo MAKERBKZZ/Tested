@@ -65,8 +65,8 @@ local FISHING_CONFIGS = {
         chargeTime = 1.0,
         waitBetween = 0,
         rodSlot = 1,
-        spamDelay = 0.05,      -- Spam every 50ms
-        maxSpamTime = 20,       -- Stop spam after 20s
+        spamDelay = 0.001,      -- Spam every 50ms
+        maxSpamTime = 30,       -- Stop spam after 20s
         skipMinigame = true    -- Skip tap-tap animation
     },
     ["Slow"] = {
@@ -77,6 +77,16 @@ local FISHING_CONFIGS = {
         maxSpamTime = 20,
         skipMinigame = false,  -- Play tap-tap animation
         minigameDuration = 5 -- Duration before firing completion
+    },
+    ["Extreme"] = {
+        chargeTime = 0.1,       -- Hampir instant lempar
+        waitBetween = 0,        -- Tidak ada jeda antar lemparan
+        rodSlot = 1,            -- Slot joran aktif
+        spamDelay = 0.01,       -- Spam tiap 10ms (sangat cepat)
+        maxSpamTime = 9999,     -- Tidak berhenti (auto farming)
+        skipMinigame = true,    -- Lewati semua animasi minigame
+        instantCatch = true,    -- Auto dapat ikan tanpa delay
+        bypassLimit = true      -- Lewati limit normal game
     }
 }
 
