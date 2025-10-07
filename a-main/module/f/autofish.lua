@@ -96,10 +96,10 @@ local FISHING_CONFIGS = {
         amazingCast = true
     },
 	["UltraExtreme"] = {
-        chargeTime = 0,
-        waitBetween = 0.05,          -- delay antar siklus agar loop tetap stabil
+        chargeTime = 0.0001,
+        waitBetween = 0,
         rodSlot = 1,
-        spamDelay = 0,
+        spamDelay = 0.0001,
         maxSpamTime = 9999,
         skipMinigame = true,
         instantCatch = true,
@@ -320,4 +320,5 @@ function AutoFishFeature:Cleanup()
 end
 
 return AutoFishFeature
+
 
