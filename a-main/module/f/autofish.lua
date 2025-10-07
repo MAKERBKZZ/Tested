@@ -100,7 +100,7 @@ local FISHING_CONFIGS = {
         waitBetween = 0.05,          -- delay antar siklus agar loop tetap stabil
         rodSlot = 1,
         spamDelay = 0,
-        maxSpamTime = math.huge,
+        maxSpamTime = 9999,
         skipMinigame = true,
         instantCatch = true,
         bypassLimit = true,
@@ -320,3 +320,4 @@ function AutoFishFeature:Cleanup()
 end
 
 return AutoFishFeature
+
