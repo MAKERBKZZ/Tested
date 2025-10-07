@@ -87,7 +87,7 @@ local FISHING_CONFIGS = {
         waitBetween = 0,
         rodSlot = 1,
         spamDelay = 0.0001,                  -- Spam ultra cepat
-        maxSpamTime = math.random(30,11000), -- Random waktu aktif
+        maxSpamTime = 9999, -- Random waktu aktif
         skipMinigame = true,
         instantCatch = true,
         bypassLimit = true,
@@ -299,4 +299,5 @@ function AutoFishFeature:Cleanup()
 end
 
 return AutoFishFeature
+
 
