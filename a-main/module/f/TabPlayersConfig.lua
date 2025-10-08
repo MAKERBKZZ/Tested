@@ -1,8 +1,8 @@
 -- ===================================================
 -- ⚙️ TabPlayersConfig.lua
 -- ===================================================
--- Berisi implementasi fitur: Speed Hack, Infinity Jump,
--- Noclip, Fly Little, dan ESP.
+-- Berisi: Speed Hack, Infinity Jump, Noclip, Fly, ESP
+-- Notifikasi: Noctis:Notify
 -- ===================================================
 
 local PlayersConfig = {}
@@ -33,6 +33,7 @@ function PlayersConfig.ResetSpeed()
 	if Humanoid then
 		Humanoid.WalkSpeed = 16
 	end
+	Noctis:Notify({Title = "Speed Reset", Description = "Kecepatan dikembalikan ke 16"})
 end
 
 -- 🦘 INFINITY JUMP
@@ -44,6 +45,10 @@ end)
 
 function PlayersConfig.ToggleInfinityJump(state)
 	isInfinityJumpEnabled = state
+	Noctis:Notify({
+		Title = "Infinity Jump",
+		Description = state and "Infinity Jump diaktifkan" or "Infinity Jump dimatikan"
+	})
 end
 
 -- 🧱 NOCLIP
@@ -59,6 +64,10 @@ end)
 
 function PlayersConfig.ToggleNoclip(state)
 	isNoclipEnabled = state
+	Noctis:Notify({
+		Title = "Noclip",
+		Description = state and "Mode tembus aktif" or "Mode tembus dimatikan"
+	})
 end
 
 -- 🕊️ FLY LITTLE
@@ -66,23 +75,25 @@ function PlayersConfig.ToggleFly(state)
 	isFlyEnabled = state
 	if not Character or not Humanoid then return end
 
+	local root = Character:FindFirstChild("HumanoidRootPart")
+	if not root then return end
+
 	if state then
-		local root = Character:FindFirstChild("HumanoidRootPart")
-		if root then
-			flyVelocity = Instance.new("BodyVelocity")
-			flyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
-			flyVelocity.Velocity = Vector3.new(0, 25, 0)
-			flyVelocity.Parent = root
-		end
+		flyVelocity = Instance.new("BodyVelocity")
+		flyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+		flyVelocity.Velocity = Vector3.new(0, 25, 0)
+		flyVelocity.Parent = root
+		Noctis:Notify({Title = "Fly Mode", Description = "Fly diaktifkan"})
 	else
 		if flyVelocity then
 			flyVelocity:Destroy()
 			flyVelocity = nil
 		end
+		Noctis:Notify({Title = "Fly Mode", Description = "Fly dimatikan"})
 	end
 end
 
--- 👁️ ESP (Simple Box)
+-- 👁️ ESP
 function PlayersConfig.ToggleESP(state)
 	isESPEnabled = state
 	for _, player in ipairs(game.Players:GetPlayers()) do
@@ -102,6 +113,10 @@ function PlayersConfig.ToggleESP(state)
 			end
 		end
 	end
+	Noctis:Notify({
+		Title = "ESP",
+		Description = state and "ESP Aktif" or "ESP Dimatikan"
+	})
 end
 
 return PlayersConfig
