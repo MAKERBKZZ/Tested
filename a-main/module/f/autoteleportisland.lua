@@ -52,6 +52,8 @@ local STATIC_ISLAND_CFRAMES = {
     ["Goa Es"]   = CFrame.new(2017.79, 6.55, 3361.61),
     ["Es Kecil"] = CFrame.new(2155.81, 6.55, 3293.74),
     ["Ancient Jungle"] = CFrame.new(1388.15063, 3.82044077, -439.909515, -0.624287128, 1.70901497e-08, 0.781194985, -2.28805064e-09, 1, -2.37054127e-08, -0.781194985, -1.6586398e-08, -0.624287128),
+    ["Ancient.J Spot1"] =  CFrame.new(879.700378, 4.256321, -331.225281, -0.249414, -0.00000005, 0.968397, -0.00000005, 1.000000, 0.00000004, -0.968397, -0.00000004, -0.249414),
+    ["Ancient.J Spot2"] =  CFrame.new(1076.65979, 4.256321, -393.225281, -0.249414, -0.00000005, 0.968397, -0.00000005, 1.000000, 0.00000004, -0.968397, -0.00000004, -0.249414),
     
 }
 
@@ -83,6 +85,8 @@ local ISLAND_MAPPING = {
     ["Goa Es"]            = "Goa Es",
     ["Es Kecil"]          = "Es Kecil",
     ["Ancient Jungle"]    = "Ancient Jungle",
+    ["Ancient.J Spot1"]   = "Ancient.J Spot1",
+    ["Ancient.J Spot2"]   = "Ancient.J Spot2",
     
 }
 
@@ -232,4 +236,3 @@ function AutoTeleportIsland:Cleanup()
 end
 
 return AutoTeleportIsland
-
