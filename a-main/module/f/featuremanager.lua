@@ -83,7 +83,7 @@ function FeatureManager:InitializeAllFeatures(notifyLib, logger)
     -- Show loading notification
     if notifyLib then
         local c = Color3.fromRGB(125, 85, 255)
-        local title = ('<font color="#%s">NOCTIS</font>'):format(c:ToHex())
+        local title = ('<font color="#%s">Fishit | Dellstore</font>'):format(c:ToHex())
         notifyLib:Notify({
             Title = title,
             Description = "Loading script...",
@@ -104,7 +104,7 @@ function FeatureManager:InitializeAllFeatures(notifyLib, logger)
         "AutoTeleportEvent", "AutoEnchantRod", "AutoFavoriteFish", "AutoFavoriteFishV2", 
         "AutoSendTrade", "AutoAcceptTrade", "FishWebhook", "AutoBuyWeather", 
         "AutoBuyBait", "AutoBuyRod", "AutoGearOxyRadar", "CopyJoinServer", 
-        "AutoReconnect", "AutoBuyMerchant", "PlayerEsp", "AutoFixFishing"
+        "AutoReconnect", "AutoBuyMerchant", "PlayerEsp", "AutoFixFishing", "CframeGrabber"
     }
     
     local successCount = 0
