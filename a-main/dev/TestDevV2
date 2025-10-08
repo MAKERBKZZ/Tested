@@ -103,6 +103,7 @@ local TabAutomation      = Window:AddTab("Automation", "workflow")
 local TabShop            = Window:AddTab("Shop", "shopping-bag")
 local TabTeleport        = Window:AddTab("Teleport","map")
 local SpawnTeleport        = Window:AddTab("Teleport Spot","map")
+local CFrameGrabberTab = Window:AddTab("CFrame Updater / Grabber", "map")
 local TabMisc            = Window:AddTab("Misc", "cog")
 local TabSetting         = Window:AddTab("Setting", "settings")
 
@@ -1311,6 +1312,82 @@ if autoTeleIslandFeature then
         autoTeleIslandFeature.__initialized = true
     end
 end
+
+--- === TAB Cframe === ---
+-- ======================================
+-- 📍 CFrame Updater / Grabber Feature
+-- ======================================
+local CframeUpdate = FeatureManager:Get("CframeGrabber")
+local CFrameGrabber
+
+-- Jika modul belum pernah di-load, ambil dari URL kamu:
+if not fishWebhookFeature or type(fishWebhookFeature.GetCurrentCFrame) ~= "function" then
+    local success, mod = pcall(function()
+        return loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/CframeGrabber.lua"))()
+    end)
+    if success and type(mod) == "table" and mod.GetCurrentCFrame then
+        CFrameGrabber = mod
+    else
+        warn("[CFrameGrabber] Gagal memuat modul dari URL.")
+    end
+else
+    CFrameGrabber = fishWebhookFeature
+end
+
+-- Buat tampilan
+local GrabberBox = CFrameGrabberTab:AddLeftGroupbox("<b>📍 CFrame Updater</b>", "map")
+
+local cframeActive = false
+local currentCFrame = ""
+local updateThread = nil
+local LabelShow = GrabberBox:AddLabel("CFrame: Menunggu data...")
+
+-- Fungsi loop updater
+local function StartCFrameUpdater()
+    if updateThread then return end
+    updateThread = task.spawn(function()
+        while cframeActive do
+            local success, result = pcall(function()
+                return CFrameGrabber.GetCurrentCFrame()
+            end)
+            if success and result then
+                currentCFrame = result
+                LabelShow:SetText("CFrame: " .. result)
+            else
+                LabelShow:SetText("CFrame: Error mengambil data")
+                warn("[CFrameGrabber] " .. tostring(result))
+            end
+            task.wait(0.5)
+        end
+        updateThread = nil
+    end)
+end
+
+-- Toggle On/Off
+GrabberBox:AddToggle("CFrameGrabber_Toggle", {
+    Text = "Aktifkan CFrame Grabber",
+    Default = false,
+    Callback = function(state)
+        cframeActive = state
+        if state then
+            warn("[CFrameGrabber] Dinyalakan")
+            StartCFrameUpdater()
+        else
+            warn("[CFrameGrabber] Dimatikan")
+        end
+    end
+})
+
+-- Tombol Salin
+GrabberBox:AddButton("Salin CFrame ke Clipboard", function()
+    if currentCFrame ~= "" and not string.find(currentCFrame, "Menunggu") then
+        setclipboard(currentCFrame)
+        warn("[CFrameGrabber] CFrame disalin ke clipboard.")
+    else
+        warn("[CFrameGrabber] Tidak ada data CFrame untuk disalin.")
+    end
+end)
+
 --- === TAB MISC === ---
 --- Webhook
 local WebhookBox = TabMisc:AddLeftGroupbox("<b>Webhook</b>", "bell-ring")
