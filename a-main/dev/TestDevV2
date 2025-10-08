@@ -77,8 +77,8 @@ mainLogger:info(string.format("Features ready: %d/%d", loadedCount, totalCount))
 --- === WINDOW === ---
 local Window = Noctis:CreateWindow({
     Title         = "<b>DellstoreV2</b>",
-    Footer        = "Fish It | v1.4.9",
-    Icon          = "rbxassetid://123156553209294",
+    Footer        = "Fish It | Made by Dellstore",
+    Icon          = "rbxassetid://130211630130295",
     NotifySide    = "Right",
     IconSize      = UDim2.fromOffset(30, 30),
     Resizable     = true,
@@ -90,7 +90,7 @@ local Window = Noctis:CreateWindow({
 
 --- === OPEN BUTTON === ---
 Window:EditOpenButton({
-    Image = "rbxassetid://123156553209294",
+    Image = "rbxassetid://130211630130295",
     Size = Vector2.new(100, 100),
     StartPos = UDim2.new(0.5, 8, 0, 0),
 })
@@ -112,28 +112,65 @@ local CHANGELOG = table.concat({
     "[+] Added Save GPU"
 }, "\n")
 local DISCORD = table.concat({
-    "https://discord.gg/3AzvRJFT3M",
+    "https://wa.link/1vkbok",
 }, "\n")
 
 --- === HOME === ---
 --- INFO 
+-- === INFORMATION SECTION ===
 local InformationBox = TabHome:AddLeftGroupbox("<b>Information</b>", "info")
+
 local changelogtitle = InformationBox:AddLabel("<b>Changelog</b>")
-local changelog      = InformationBox:AddLabel({
+local changelog = InformationBox:AddLabel({
     Text     = CHANGELOG,
     DoesWrap = true 
 })
-local sugestbugs     = InformationBox:AddLabel("Report bugs to our<br/>Discord Server")
+
+local sugestbugs = InformationBox:AddLabel("Report bugs to our<br/>Whatsapp Admin")
 InformationBox:AddDivider()
-local joindc         = InformationBox:AddLabel("<b>Join our Discord</b>")
-local discordbtn     = InformationBox:AddButton({
-    Text = "Discord",
+
+-- === COPY ROOM ID BUTTON (Dibawah Information) ===
+local copyRoomBtn = InformationBox:AddButton({
+    Text = "📋 Copy Room ID (JobId)",
+    Func = function()
+        local jobId = game.JobId or "Unknown"
+        if typeof(setclipboard) == "function" then
+            setclipboard(jobId)
+            Noctis:Notify({
+                Title = title,
+                Description = "✅ Room ID copied:\n" .. jobId,
+                Duration = 3
+            })
+        else
+            Noctis:Notify({
+                Title = title,
+                Description = "❌ Clipboard not available",
+                Duration = 3
+            })
+        end
+    end
+})
+
+InformationBox:AddDivider()
+
+-- === CONTACT ADMIN ===
+local joindc = InformationBox:AddLabel("<b>Contact Person Admin</b>")
+local discordbtn = InformationBox:AddButton({
+    Text = "💬 Whatsapp Admin",
     Func = function()
         if typeof(setclipboard) == "function" then
             setclipboard(DISCORD)
-            Noctis:Notify({ Title = title, Description = "Discord link copied!", Duration = 2 })
+            Noctis:Notify({
+                Title = title,
+                Description = "Whatsapp link copied!",
+                Duration = 2
+            })
         else
-            Noctis:Notify({ Title = title, Description = "Clipboard not available", Duration = 3 })
+            Noctis:Notify({
+                Title = title,
+                Description = "Clipboard not available",
+                Duration = 3
+            })
         end
     end
 })
