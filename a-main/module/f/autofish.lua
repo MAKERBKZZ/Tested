@@ -1,6 +1,6 @@
 -- ===========================
--- AUTO FISH FEATURE - ULTRA EXTREME (FINAL LOOP FIX)
--- File: autofishv4_ultraextreme.lua
+-- AUTO FISH FEATURE - SUPER EXTREME (FIXED & RANDOM)
+-- File: autofishv4_superextreme.lua
 -- ===========================
 
 local AutoFishFeature = {}
@@ -43,7 +43,7 @@ end
 -- Feature state
 local isRunning = false
 local currentMode = "Fast"
-local connection, fishObtainedConnection
+local connection, spamConnection, fishObtainedConnection
 local controls = {}
 local fishingInProgress = false
 local lastFishTime = 0
@@ -57,7 +57,7 @@ local fishCaughtFlag = false
 local FISHING_CONFIGS = {
 	["Fast"] = {
 		chargeTime = 1.0,
-		waitBetween = 0.5,
+		waitBetween = 0,
 		rodSlot = 1,
 		spamDelay = 0.001,
 		maxSpamTime = 30,
@@ -83,31 +83,17 @@ local FISHING_CONFIGS = {
 		bypassLimit = true
 	},
 	["SuperExtreme"] = {
-        chargeTime = 0.0001,
+        chargeTime = 0.0001,                   -- Instant lempar
         waitBetween = 0,
         rodSlot = 1,
-        spamDelay = 0.0001,
-        maxSpamTime = 9999,
+        spamDelay = 0.0001,                  -- Spam ultra cepat
+        maxSpamTime = 9999, -- Random waktu aktif
         skipMinigame = true,
         instantCatch = true,
         bypassLimit = true,
         ignoreCooldown = true,
         superReel = true,
-        amazingCast = true
-    },
-	["UltraExtreme"] = {
-        chargeTime = 0.0001,
-        waitBetween = 0,
-        rodSlot = 1,
-        spamDelay = 0.0001,
-        maxSpamTime = 9999,
-        skipMinigame = true,
-        instantCatch = true,
-        bypassLimit = true,
-        ignoreCooldown = true,
-        superReel = true,
-        amazingCast = true,
-        burstSpam = true             -- 💥 burst spam langsung
+        amazingCast = true                   -- 💥 Auto Amazing Cast
     }
 }
 
@@ -153,6 +139,7 @@ function AutoFishFeature:Stop()
 	fishingInProgress, spamActive, completionCheckActive, fishCaughtFlag = false, false, false, false
 
 	if connection then connection:Disconnect() connection = nil end
+	if spamConnection then spamConnection:Disconnect() spamConnection = nil end
 	if fishObtainedConnection then fishObtainedConnection:Disconnect() fishObtainedConnection = nil end
 
 	logger:info("Stopped SPAM method")
@@ -170,14 +157,16 @@ function AutoFishFeature:SetupFishObtainedListener()
 		if isRunning then
 			logger:info("🎣 Fish obtained detected!")
 			fishCaughtFlag = true
-			task.delay(0.05, function()
+			if spamActive then spamActive, completionCheckActive = false, false end
+			task.spawn(function()
+				task.wait(0.1)
 				fishingInProgress, fishCaughtFlag = false, false
 			end)
 		end
 	end)
 end
 
--- Main loop
+-- Main spam loop
 function AutoFishFeature:SpamFishingLoop()
 	if fishingInProgress or spamActive then return end
 	local currentTime = tick()
@@ -190,9 +179,7 @@ function AutoFishFeature:SpamFishingLoop()
 	task.spawn(function()
 		local success = self:ExecuteSpamFishingSequence()
 		fishingInProgress = false
-		if success then
-			logger:info("Cycle completed!")
-		end
+		if success then logger:info("SPAM cycle completed!") end
 	end)
 end
 
@@ -200,12 +187,15 @@ end
 function AutoFishFeature:ExecuteSpamFishingSequence()
 	local config = FISHING_CONFIGS[currentMode]
 	if not self:EquipRod(config.rodSlot) then return false end
-	task.wait(0.05)
+	task.wait(0.1)
 	if not self:ChargeRod(config.chargeTime) then return false end
 	if not self:CastRod() then return false end
 
+	-- 🎲 Random maxSpamTime setiap kali siklus dimulai
 	local randomMaxTime = math.random(30, 11000)
-	self:StartCompletionSpam(config.spamDelay, config.burstSpam and 1 or randomMaxTime)
+	logger:info("SuperExtreme spam duration:", randomMaxTime, "seconds")
+
+	self:StartCompletionSpam(config.spamDelay, randomMaxTime)
 	return true
 end
 
@@ -238,19 +228,8 @@ function AutoFishFeature:StartCompletionSpam(delay, maxTime)
 	if spamActive then return end
 	spamActive, completionCheckActive, fishCaughtFlag = true, true, false
 	local spamStartTime = tick()
-	local config = FISHING_CONFIGS[currentMode]
 
 	task.spawn(function()
-		if config.burstSpam then
-			-- 💥 UltraExtreme burst
-			for i = 1, 300 do
-				self:FireCompletion()
-				if fishCaughtFlag or self:CheckFishingCompleted() then break end
-			end
-			spamActive, completionCheckActive = false, false
-			return
-		end
-
 		while spamActive and isRunning and (tick() - spamStartTime) < maxTime do
 			self:FireCompletion()
 			if fishCaughtFlag or self:CheckFishingCompleted() then break end
@@ -320,5 +299,4 @@ function AutoFishFeature:Cleanup()
 end
 
 return AutoFishFeature
-
 
