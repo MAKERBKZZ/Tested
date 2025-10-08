@@ -35,8 +35,9 @@ local FEATURE_URLS = {
     AutoReexec         = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autoreexec.lua",
     AutoBuyMerchant    = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autobuymerchant.lua",
     AutoFixFishing     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autofixfishing.lua",
-    CframeGrabber     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/CframeGrabber.lua"    
-        
+    CframeGrabber     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/CframeGrabber.lua",
+    TabPlayersConfig     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/TabPlayersConfig.lua",
+     
 }
 
 -- Load single feature synchronously
@@ -104,7 +105,7 @@ function FeatureManager:InitializeAllFeatures(notifyLib, logger)
         "AutoTeleportEvent", "AutoEnchantRod", "AutoFavoriteFish", "AutoFavoriteFishV2", 
         "AutoSendTrade", "AutoAcceptTrade", "FishWebhook", "AutoBuyWeather", 
         "AutoBuyBait", "AutoBuyRod", "AutoGearOxyRadar", "CopyJoinServer", 
-        "AutoReconnect", "AutoBuyMerchant", "PlayerEsp", "AutoFixFishing", "CframeGrabber"
+        "AutoReconnect", "AutoBuyMerchant", "PlayerEsp", "AutoFixFishing", "CframeGrabber", "TabPlayersConfig"
     }
     
     local successCount = 0
