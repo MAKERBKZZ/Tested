@@ -34,7 +34,9 @@ local FEATURE_URLS = {
     AutoReconnect      = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autoreconnect.lua",
     AutoReexec         = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autoreexec.lua",
     AutoBuyMerchant    = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autobuymerchant.lua",
-    AutoFixFishing     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autofixfishing.lua"  
+    AutoFixFishing     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autofixfishing.lua",
+    CframeGrabber     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/CframeGrabber.lua"    
+        
 }
 
 -- Load single feature synchronously
