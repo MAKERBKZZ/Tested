@@ -1221,113 +1221,72 @@ if positionManagerFeature then
 end
 
 --- Tab Spawn Teleport
-
 local IslandBox = SpawnTeleport:AddLeftGroupbox("<b>Teleport To Spot</b>", "map")
 local autoTeleIslandFeature = FeatureManager:Get("AutoTeleportIsland")
 local currentIsland = "Fisherman Island"
 
--- Dropdown pertama
-local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
-    Text = "Select Spot Paus & Batu",
-    Tooltip = "",
-    Values = {
-        "Bawah Air Terjun",
-        "Atas Air Terjun",
-        "Dalam Goa",
-        "Tebing Laut",
-        "Belakang Patung",
-    },
-    Searchable = true,
-    MaxVisibileDropdownItems = 6,
-    Multi = false,
-    Callback = function(Value)
-        currentIsland = Value or {}
-        if autoTeleIslandFeature and autoTeleIslandFeature.SetIsland then
-            autoTeleIslandFeature:SetIsland(Value)
+-- === PATCH: AUTO SCROLL SUPPORT ===
+task.spawn(function()
+    task.wait(0.5) -- tunggu GUI terbuat
+    local success, err = pcall(function()
+        local box = IslandBox.Container or IslandBox.ScrollContainer or IslandBox
+        if box then
+            local scroll = box:FindFirstAncestorWhichIsA("ScrollingFrame")
+            if scroll then
+                scroll.ScrollingEnabled = true
+                scroll.CanvasSize = UDim2.new(0, 0, 4, 0) -- 4x tinggi normal
+                scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+                scroll.ScrollBarThickness = 6
+            end
         end
+    end)
+    if not success then
+        warn("⚠️ Scroll patch failed:", err)
     end
+end)
+
+-- === Fungsi Bantu Buat Dropdown ===
+local function createDropdown(id, text, values)
+    return IslandBox:AddDropdown(id, {
+        Text = text,
+        Tooltip = "",
+        Values = values,
+        Searchable = true,
+        MaxVisibileDropdownItems = 6,
+        Multi = false,
+        Callback = function(Value)
+            currentIsland = Value or {}
+            if autoTeleIslandFeature and autoTeleIslandFeature.SetIsland then
+                autoTeleIslandFeature:SetIsland(Value)
+            end
+        end
+    })
+end
+
+-- === Semua Dropdown Teleport ===
+createDropdown("teleislanddd", "Select Spot Paus & Batu", {
+    "Bawah Air Terjun", "Atas Air Terjun", "Dalam Goa", "Tebing Laut", "Belakang Patung",
 })
 
--- Dropdown kedua (v2)
-local teleisland_ddv2 = IslandBox:AddDropdown("teleislandddv2", {
-    Text = "Select Spot Teleport Spot Cacing",
-    Tooltip = "",
-    Values = {
-        "NOOB",
-        "Goa Es",
-        "Es Kecil",
-    },
-    Searchable = true,
-    MaxVisibileDropdownItems = 6,
-    Multi = false,
-    Callback = function(Value)
-        currentIsland = Value or {}
-        if autoTeleIslandFeature and autoTeleIslandFeature.SetIsland then
-            autoTeleIslandFeature:SetIsland(Value)
-        end
-    end
+createDropdown("teleislandddv2", "Select Spot Teleport Spot Cacing", {
+    "NOOB", "Goa Es", "Es Kecil",
 })
 
--- Dropdown kedua (v3)
-local teleisland_ddv3 = IslandBox:AddDropdown("teleislandddv3", {
-    Text = "Select Spot Frosborn Crater",
-    Tooltip = "",
-    Values = {
-        "Tengah",
-        "Tepi",
-    },
-    Searchable = true,
-    MaxVisibileDropdownItems = 6,
-    Multi = false,
-    Callback = function(Value)
-        currentIsland = Value or {}
-        if autoTeleIslandFeature and autoTeleIslandFeature.SetIsland then
-           autoTeleIslandFeature:SetIsland(Value)
-        end
-    end
+createDropdown("teleislandddv3", "Select Spot Frosborn Crater", {
+    "Tengah", "Tepi",
 })
 
--- Dropdown kedua (v4)
-local teleisland_ddv4 = IslandBox:AddDropdown("teleislandddv4", {
-    Text = "Select Spot Kraken & Orca",
-    Tooltip = "",
-    Values = {
-        "Depan Board",
-        "Belakang Patung",
-        "Bawah Jembatan",
-        "Atas Jembatan",
-        "Pulau Kecil",
-    },
-    Searchable = true,
-    MaxVisibileDropdownItems = 6,
-    Multi = false,
-    Callback = function(Value)
-        currentIsland = Value or {}
-        if autoTeleIslandFeature and autoTeleIslandFeature.SetIsland then
-           autoTeleIslandFeature:SetIsland(Value)
-        end
-    end
+createDropdown("teleislandddv4", "Select Spot Kraken & Orca", {
+    "Depan Board", "Belakang Patung", "Bawah Jembatan", "Atas Jembatan", "Pulau Kecil",
 })
 
--- Dropdown kedua (v5)
-local teleisland_ddv5 = IslandBox:AddDropdown("teleislandddv5", {
-    Text = "Select Spot Ancient Jungle",
-    Tooltip = "",
-    Values = {
-        "Ancient Jungle",
-        "Ancient.J Spot1",
-        "Ancient.J EnChant",
-    },
-    Searchable = true,
-    MaxVisibileDropdownItems = 6,
-    Multi = false,
-    Callback = function(Value)
-        currentIsland = Value or {}
-        if autoTeleIslandFeature and autoTeleIslandFeature.SetIsland then
-           autoTeleIslandFeature:SetIsland(Value)
-        end
-    end
+createDropdown("teleislandddv5", "Select Spot Ancient Jungle", {
+    "Ancient Jungle", "Ancient.J Spot1", "Ancient.J EnChant", "Ancient.J Secret", "Ancient.J Floral Bait",
 })
+
+
+
+-- === Tombol Teleport ===
 local teleisland_btn = IslandBox:AddButton({
     Text = "Teleport Spot",
     Func = function()
@@ -1341,17 +1300,18 @@ local teleisland_btn = IslandBox:AddButton({
         end
     end
 })
+
+-- === Sinkronisasi Fitur ===
 if autoTeleIslandFeature then
     autoTeleIslandFeature.__controls = {
-        Dropdown = teleisland_dd, teleisland_ddv2, teleisland_ddv3, teleisland_ddv4, teleisland_ddv5,
         button = teleisland_btn
     }
-    
     if autoTeleIslandFeature.Init and not autoTeleIslandFeature.__initialized then
         autoTeleIslandFeature:Init(autoTeleIslandFeature, autoTeleIslandFeature.__controls)
         autoTeleIslandFeature.__initialized = true
     end
 end
+
 
 --- === TAB Cframe === ---
 -- ======================================
