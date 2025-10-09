@@ -53,7 +53,9 @@ local STATIC_ISLAND_CFRAMES = {
     ["Es Kecil"] = CFrame.new(2155.81, 6.55, 3293.74),
     ["Ancient Jungle"] = CFrame.new(1388.15063, 3.82044077, -439.909515, -0.624287128, 1.70901497e-08, 0.781194985, -2.28805064e-09, 1, -2.37054127e-08, -0.781194985, -1.6586398e-08, -0.624287128),
     ["Ancient.J EnChant"] = CFrame.new(1481.310303, 127.624985, -593.838501, 0.687611, -0.00000001, 0.726079, 0.00000003, 1.000000, -0.00000002, -0.726079, 0.00000004, 0.687611),
+    ["Ancient.J Floral Bait"] =  CFrame.new(1368.409790, -41.925102, -617.910156, 0.994218, -0.00000001, 0.107381, 0.00000001, 1.000000, 0.00000000, -0.107381, -0.00000000, 0.994218),
     ["Ancient.J Spot1"] =  CFrame.new(879.700378, 4.256321, -331.225281, -0.249414, -0.00000005, 0.968397, -0.00000005, 1.000000, 0.00000004, -0.968397, -0.00000004, -0.249414),
+    ["Ancient.J Secret"] =  CFrame.new(1480.062256, -22.375002, -666.430603, 0.165223, 0.00000003, -0.986256, 0.00000004, 1.000000, 0.00000004, 0.986256, -0.00000005, 0.165223),
     
 }
 
@@ -86,8 +88,11 @@ local ISLAND_MAPPING = {
     ["Es Kecil"]          = "Es Kecil",
     ["Ancient Jungle"]    = "Ancient Jungle",
     ["Ancient.J EnChant"] = "Ancient.J EnChant",
+    ["Ancient.J Secret"]  = "Ancient.J Secret",
     ["Ancient.J Spot1"]   = "Ancient.J Spot1",
-    ["Ancient.J Spot2"]   = "Ancient.J Spot2",
+    ["Ancient.J Floral Bait"] = "Ancient.J Floral Bait",
+
+
     
 }
 
