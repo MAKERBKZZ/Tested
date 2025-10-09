@@ -1281,7 +1281,7 @@ createDropdown("teleislandddv4", "Select Spot Kraken & Orca", {
 })
 
 createDropdown("teleislandddv5", "Select Spot Ancient Jungle", {
-    "Ancient Jungle", "Ancient.J Spot1", "Ancient.J EnChant", "Ancient.J Secret", "Ancient.J Floral Bait",
+    "Ancient Jungle", "Ancient.J Spot1", "Ancient.J EnChant", "Ancient.J Secret", "Ancient.J Floral",
 })
 
 
