@@ -16,7 +16,7 @@ end
 local TeleportWindow = mainLib:CreateWindow({
     Title = "🌍 Teleport Menu",
     Center = true,
-    AutoShow = false,
+    AutoShow = true,
     Size = UDim2.new(0, 420, 0, 500),
 })
 
