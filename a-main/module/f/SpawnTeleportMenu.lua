@@ -5,21 +5,37 @@
 local TeleportMenu = {}
 local guiVisible = false
 
--- Buat window baru di luar tab utama
-local TeleportWindow = Noctis:CreateWindow({
+-- Cek apakah Noctis tersedia
+local guiSystem = nil
+if Noctis then
+    guiSystem = Noctis
+elseif _G.Noctis then
+    guiSystem = _G.Noctis
+elseif Window and Window.CreateWindow then
+    guiSystem = Window
+else
+    warn("⚠️ Noctis GUI instance not found, fallback using Window")
+    guiSystem = Window
+end
+
+-- Buat window baru
+local TeleportWindow = guiSystem:CreateWindow({
     Title = "🌍 Teleport Menu",
-    Size = UDim2.new(0, 400, 0, 480),
-    Position = UDim2.new(0.5, -200, 0.5, -240),
+    Size = UDim2.new(0, 420, 0, 500),
+    Position = UDim2.new(0.5, -210, 0.5, -250),
     ShowMinimizeButton = true,
-    ShowCloseButton = false,
+    ShowCloseButton = true,
 })
+
+-- Pastikan window tersembunyi dulu
+TeleportWindow:Hide()
 
 -- Buat groupbox utama
 local IslandBox = TeleportWindow:AddLeftGroupbox("<b>Teleport To Spot</b>", "map")
 local autoTeleIslandFeature = FeatureManager:Get("AutoTeleportIsland")
 local currentIsland = "Fisherman Island"
 
--- Semua dropdown dan tombol teleport seperti sebelumnya
+-- Dropdown 1
 local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
     Text = "Select Spot Paus & Batu",
     Values = { "Bawah Air Terjun", "Atas Air Terjun", "Dalam Goa", "Tebing Laut", "Belakang Patung" },
@@ -32,6 +48,7 @@ local teleisland_dd = IslandBox:AddDropdown("teleislanddd", {
     end
 })
 
+-- Dropdown 2
 local teleisland_ddv2 = IslandBox:AddDropdown("teleislandddv2", {
     Text = "Select Spot Teleport Spot Cacing",
     Values = { "NOOB", "Goa Es", "Es Kecil" },
@@ -44,6 +61,7 @@ local teleisland_ddv2 = IslandBox:AddDropdown("teleislandddv2", {
     end
 })
 
+-- Dropdown 3
 local teleisland_ddv3 = IslandBox:AddDropdown("teleislandddv3", {
     Text = "Select Spot Frosborn Crater",
     Values = { "Tengah", "Tepi" },
@@ -56,6 +74,7 @@ local teleisland_ddv3 = IslandBox:AddDropdown("teleislandddv3", {
     end
 })
 
+-- Dropdown 4
 local teleisland_ddv4 = IslandBox:AddDropdown("teleislandddv4", {
     Text = "Select Spot Kraken & Orca",
     Values = { "Depan Board", "Belakang Patung", "Bawah Jembatan", "Atas Jembatan", "Pulau Kecil" },
@@ -68,6 +87,7 @@ local teleisland_ddv4 = IslandBox:AddDropdown("teleislandddv4", {
     end
 })
 
+-- Dropdown 5
 local teleisland_ddv5 = IslandBox:AddDropdown("teleislandddv5", {
     Text = "Select Spot Ancient Jungle",
     Values = { "Ancient.J Spot1", "Ancient.J Spot2" },
@@ -80,6 +100,7 @@ local teleisland_ddv5 = IslandBox:AddDropdown("teleislandddv5", {
     end
 })
 
+-- Tombol Teleport
 local teleisland_btn = IslandBox:AddButton({
     Text = "Teleport Spot",
     Func = function()
@@ -94,20 +115,16 @@ local teleisland_btn = IslandBox:AddButton({
     end
 })
 
--- Simpan control agar bisa diinisialisasi
+-- Sinkronisasi
 if autoTeleIslandFeature then
-    autoTeleIslandFeature.__controls = {
-        Dropdown = teleisland_dd,
-        button = teleisland_btn
-    }
-
+    autoTeleIslandFeature.__controls = { Dropdown = teleisland_dd, button = teleisland_btn }
     if autoTeleIslandFeature.Init and not autoTeleIslandFeature.__initialized then
         autoTeleIslandFeature:Init(autoTeleIslandFeature, autoTeleIslandFeature.__controls)
         autoTeleIslandFeature.__initialized = true
     end
 end
 
--- Fungsi show/hide
+-- Fungsi show/hide window
 function TeleportMenu.Show()
     TeleportWindow:Show()
     guiVisible = true
