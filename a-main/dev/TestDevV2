@@ -1289,11 +1289,14 @@ local teleisland_ddv3 = IslandBox:AddDropdown("teleislandddv3", {
 
 -- Dropdown kedua (v4)
 local teleisland_ddv4 = IslandBox:AddDropdown("teleislandddv4", {
-    Text = "Select Spot Kraken",
+    Text = "Select Spot Kraken & Orca",
     Tooltip = "",
     Values = {
         "Depan Board",
         "Belakang Patung",
+        "Bawah Jembatan",
+        "Atas Jembatan",
+        "Pulau Kecil",
     },
     Searchable = true,
     MaxVisibileDropdownItems = 6,
@@ -1308,12 +1311,12 @@ local teleisland_ddv4 = IslandBox:AddDropdown("teleislandddv4", {
 
 -- Dropdown kedua (v5)
 local teleisland_ddv5 = IslandBox:AddDropdown("teleislandddv5", {
-    Text = "Select Spot Orca",
+    Text = "Select Spot Ancient Jungle",
     Tooltip = "",
     Values = {
-        "Bawah Jembatan",
-        "Atas Jembatan",
-        "Pulau Kecil",
+        "Ancient Jungle",
+        "Ancient.J Spot1",
+        "Ancient.J EnChant",
     },
     Searchable = true,
     MaxVisibileDropdownItems = 6,
@@ -1340,7 +1343,7 @@ local teleisland_btn = IslandBox:AddButton({
 })
 if autoTeleIslandFeature then
     autoTeleIslandFeature.__controls = {
-        Dropdown = teleisland_dd,
+        Dropdown = teleisland_dd, teleisland_ddv2, teleisland_ddv3, teleisland_ddv4, teleisland_ddv5,
         button = teleisland_btn
     }
     
