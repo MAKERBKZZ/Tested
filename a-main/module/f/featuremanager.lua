@@ -36,7 +36,6 @@ local FEATURE_URLS = {
     AutoBuyMerchant    = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autobuymerchant.lua",
     AutoFixFishing     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/autofixfishing.lua",
     CframeGrabber     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/CframeGrabber.lua",
-    TabPlayersConfig     = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/a-main/module/f/TabPlayersConfig.lua",
      
 }
 
@@ -105,7 +104,7 @@ function FeatureManager:InitializeAllFeatures(notifyLib, logger)
         "AutoTeleportEvent", "AutoEnchantRod", "AutoFavoriteFish", "AutoFavoriteFishV2", 
         "AutoSendTrade", "AutoAcceptTrade", "FishWebhook", "AutoBuyWeather", 
         "AutoBuyBait", "AutoBuyRod", "AutoGearOxyRadar", "CopyJoinServer", 
-        "AutoReconnect", "AutoBuyMerchant", "PlayerEsp", "AutoFixFishing", "CframeGrabber", "TabPlayersConfig"
+        "AutoReconnect", "AutoBuyMerchant", "PlayerEsp", "AutoFixFishing", "CframeGrabber"
     }
     
     local successCount = 0
