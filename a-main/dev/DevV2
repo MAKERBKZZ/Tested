@@ -1284,6 +1284,9 @@ createDropdown("teleislandddv5", "Select Spot Ancient Jungle", {
     "Ancient Jungle", "Ancient.J Spot1", "Ancient.J EnChant", "Ancient.J Secret", "Ancient.J Floral",
 })
 
+createDropdown("teleislandddv6", "Select Spot Mount Hallowen", {
+    "M.Hallowen Spot1", "M.Hallowen Spot2", "M.Hallowen Halowbay",
+})
 
 
 -- === Tombol Teleport ===
