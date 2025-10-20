@@ -51,6 +51,8 @@ local STATIC_ISLAND_CFRAMES = {
     ["Pulau Kecil"]    = CFrame.new(-211, 2, 2946),
     ["Goa Es"]   = CFrame.new(2017.79, 6.55, 3361.61),
     ["Es Kecil"] = CFrame.new(2155.81, 6.55, 3293.74),
+    ["Mount Hallow"] = CFrame.new(2128.192383, 80.433182, 3266.303223, -0.933753, -0.00000000, 0.357919, -0.00000001, 1.000000, -0.00000000, -0.357919, -0.00000000, -0.933753),
+
 }
 
 -- For fallback lookup (optional; names map to themselves by default)
@@ -80,6 +82,7 @@ local ISLAND_MAPPING = {
     ["Pulau Kecil"]       = "Pulau Kecil",
     ["Goa Es"]            = "Goa Es",
     ["Es Kecil"]          = "Es Kecil",
+    ["Mount Hallow"]      = "Mount Hallow",
     
 }
 
