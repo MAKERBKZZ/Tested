@@ -1,0 +1,6 @@
+return {
+  ["DLS"] = "OWNER",          
+  ["VIP"] = "PERMANENT",        
+  ["DELLSTORE"] = "20251023",   
+  ["VIPP"] = "20261231"         
+}
