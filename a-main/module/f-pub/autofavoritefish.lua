@@ -14,7 +14,7 @@ local RS = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 -- Dependencies
-local InventoryWatcher = loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/utils/fishit/inventdetect.lua"))()
+local InventoryWatcher = loadstring(game:HttpGet("https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/utils/fishit/inventdetect.lua"))()
 
 -- State
 local running = false

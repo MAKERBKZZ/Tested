@@ -1,4 +1,4 @@
-local Logger       = loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/utils/logger.lua"))()
+local Logger       = loadstring(game:HttpGet("https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/utils/logger.lua"))()
 
 -- FOR PRODUCTION: Uncomment this line to disable all logging
 --Logger.disableAll()
@@ -17,10 +17,10 @@ local SaveManager  = loadstring(game:HttpGet("https://raw.githubusercontent.com/
 -- LOAD HELPERS & FEATURE MANAGER
 -- ===========================
 mainLogger:info("Loading Helpers...")
-local Helpers = loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/module/f/helpers.lua"))()
+local Helpers = loadstring(game:HttpGet("https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/helpers.lua"))()
 
 mainLogger:info("Loading FeatureManager...")
-local FeatureManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/module/f/featuremanager.lua"))()
+local FeatureManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/featuremanager.lua"))()
 
 -- ===========================
 -- GLOBAL SERVICES & VARIABLES
@@ -50,7 +50,7 @@ _G.NetPath = NetPath
 -- Load InventoryWatcher globally for features that need it
 _G.InventoryWatcher = nil
 pcall(function()
-    _G.InventoryWatcher = loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/utils/fishit/inventdetect.lua"))()
+    _G.InventoryWatcher = loadstring(game:HttpGet("https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/utils/fishit/inventdetect.lua"))()
 end)
 
 -- Cache helper results
@@ -1342,7 +1342,7 @@ local autoReexec = FeatureManager:Get("AutoReexec")
 if autoReexec and autoReexec.Init and not autoReexec.__initialized then
     autoReexec:Init({
         mode = "url",
-        url  = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/dev/fishdev.lua",
+        url  = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/dev/fishdev.lua",
         rearmEveryS = 20,
         addBootGuard = true,
     })

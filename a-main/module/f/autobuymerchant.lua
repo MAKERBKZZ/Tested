@@ -27,7 +27,7 @@ end
 function AutoBuyMerchant:Init(controls)
     self._controls = controls
 
-    local invWatcherCode = game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/utils/fishit/inventdetect.lua")
+    local invWatcherCode = game:HttpGet("https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/utils/fishit/inventdetect.lua")
     local InventoryWatcher = loadstring(invWatcherCode)()
     self._invWatcher = InventoryWatcher.new()
 
