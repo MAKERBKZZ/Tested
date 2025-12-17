@@ -1334,7 +1334,7 @@ local autoReexec = FeatureManager:Get("AutoReexec")
 if autoReexec and autoReexec.Init and not autoReexec.__initialized then
     autoReexec:Init({
         mode = "url",
-        url  = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/dev/fishdev.lua",
+        url  = "https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/dev/fishdev.lua",
         rearmEveryS = 20,
         addBootGuard = true,
     })

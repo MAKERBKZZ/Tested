@@ -1,6 +1,6 @@
 -- Memuat daftar game dari GitHub
 local ok, gamesOrErr = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/games.lua"))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/Tested/refs/heads/main/games.lua"))()
 end)
 if not ok then
     warn("[dev] gagal memuat daftar game:", gamesOrErr)
