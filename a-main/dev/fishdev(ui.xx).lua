@@ -1,4 +1,4 @@
-local Logger = loadstring(game:HttpGet("https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/utils/logger.lua"))()
+local Logger = loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/utils/logger.lua"))()
 Logger.enableAll()
 
 -- OPTIMIZE: Consolidate loggers into table
@@ -341,7 +341,7 @@ end)
 
 _G.InventoryWatcher = nil
 pcall(function()
-    _G.InventoryWatcher = loadstring(game:HttpGet("https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/utils/fishit/inventdetect.lua"))()
+    _G.InventoryWatcher = loadstring(game:HttpGet("https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/utils/fishit/inventdetect.lua"))()
 end)
 
 -- FeatureManager (keep sync loading as requested)
@@ -352,30 +352,30 @@ FeatureManager.LoadedCount = 0
 FeatureManager.IsReady = false
 
 local FEATURE_URLS = {
-    AutoFish = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autofish.lua",
-    AutoSellFish = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autosellfish.lua",
-    AutoTeleportIsland = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autoteleportisland.lua",
-    FishWebhook = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/fishwebhook.lua",
-    AutoBuyWeather = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autobuyweather.lua",
-    AutoBuyBait = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autobuybait.lua",
-    AutoBuyRod = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autobuyrod.lua",
-    AutoTeleportEvent = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autoteleportevent.lua",
-    AutoGearOxyRadar = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autogearoxyradar.lua",
-    AntiAfk = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/antiafk.lua",
-    AutoEnchantRod = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autoenchantrod.lua",
-    AutoFavoriteFish = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autofavoritefish.lua",
-    AutoFavoriteFishV2 = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autofavoritefishv2.lua",
-    AutoTeleportPlayer = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autoteleportplayer.lua",
-    BoostFPS = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/boostfps.lua",
-    AutoSendTrade = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autosendtrade.lua",
-    AutoAcceptTrade = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autoaccepttrade.lua",
-    SavePosition = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/saveposition.lua",
-    PositionManager = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/positionmanager.lua",
-    CopyJoinServer = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/copyjoinserver.lua",
-    AutoReconnect = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autoreconnect.lua",
-    AutoReexec = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/autoreexec.lua",
-    InfEnchant = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/infenchant.lua",
-    AutoMythic = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/module/f/automythic.lua"
+    AutoFish = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autofish.lua",
+    AutoSellFish = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autosellfish.lua",
+    AutoTeleportIsland = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autoteleportisland.lua",
+    FishWebhook = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/fishwebhook.lua",
+    AutoBuyWeather = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autobuyweather.lua",
+    AutoBuyBait = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autobuybait.lua",
+    AutoBuyRod = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autobuyrod.lua",
+    AutoTeleportEvent = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autoteleportevent.lua",
+    AutoGearOxyRadar = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autogearoxyradar.lua",
+    AntiAfk = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/antiafk.lua",
+    AutoEnchantRod = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autoenchantrod.lua",
+    AutoFavoriteFish = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autofavoritefish.lua",
+    AutoFavoriteFishV2 = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autofavoritefishv2.lua",
+    AutoTeleportPlayer = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autoteleportplayer.lua",
+    BoostFPS = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/boostfps.lua",
+    AutoSendTrade = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autosendtrade.lua",
+    AutoAcceptTrade = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autoaccepttrade.lua",
+    SavePosition = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/saveposition.lua",
+    PositionManager = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/positionmanager.lua",
+    CopyJoinServer = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/copyjoinserver.lua",
+    AutoReconnect = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autoreconnect.lua",
+    AutoReexec = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/autoreexec.lua",
+    InfEnchant = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/infenchant.lua",
+    AutoMythic = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/module/f/automythic.lua"
 }
 
 function FeatureManager:LoadSingleFeature(featureName, url)
@@ -1613,7 +1613,7 @@ local function createMiscSection()
     if UI.Features.autoReexec and UI.Features.autoReexec.Init and not UI.Features.autoReexec.__initialized then
         UI.Features.autoReexec:Init({
             mode = "url",
-            url = "https://raw.githubusercontent.com/c3iv3r/a/refs/heads/main/dev/fishdev.lua",
+            url = "https://raw.githubusercontent.com/MAKERBKZZ/a/refs/heads/main/dev/fishdev.lua",
             rearmEveryS = 20,
             addBootGuard = true,
         })
